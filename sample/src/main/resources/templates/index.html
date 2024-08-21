@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Sample</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        #sampleList {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>WebSocket Sample Data</h1>
+<div id="status">연결 상태: 연결 중...</div>
+<div id="sampleList"></div>
+
+<script>
+    // WebSocket 연결 설정
+    var socket = new SockJS('/ws');
+    var stompClient = Stomp.over(socket);
+
+    // WebSocket 연결 후 구독 설정
+    stompClient.connect({}, function(frame) {
+        document.getElementById('status').textContent = '연결 상태: 연결됨';
+        console.log('Connected: ' + frame);
+
+        stompClient.subscribe('/topic/samples', function(message) {
+            console.log("Received message:", message.body);
+            var samples = JSON.parse(message.body);
+            updateUI(samples);
+        });
+    });
+
+    // 수신된 데이터를 UI에 추가하는 함수
+    function updateUI(samples) {
+        var sampleList = document.getElementById('sampleList');
+
+        // <ul> 요소가 없으면 새로 생성
+        var ul = sampleList.querySelector('ul');
+        if (!ul) {
+            ul = document.createElement('ul');
+            sampleList.appendChild(ul);
+        }
+
+        // 수신된 데이터를 리스트에 추가
+        samples.forEach(function(sample) {
+            var li = document.createElement('li');
+            li.textContent = 'ID: ' + (sample.id || 'N/A') +', name: ' + (sample.name  || 'N/A') + ', Description: ' + (sample.description || 'N/A');
+            ul.appendChild(li);
+        });
+    }
+</script>
+</body>
+</html>
