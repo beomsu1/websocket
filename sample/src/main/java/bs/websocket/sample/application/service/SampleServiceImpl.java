@@ -2,7 +2,7 @@ package bs.websocket.sample.application.service;
 
 import bs.websocket.sample.application.dto.SampleRequestDTO;
 import bs.websocket.sample.application.dto.SampleResponseDTO;
-import bs.websocket.sample.domain.Sample;
+import bs.websocket.sample.domain.document.Sample;
 import bs.websocket.sample.domain.repository.SampleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

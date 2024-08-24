@@ -1,7 +1,7 @@
 package bs.websocket.sample;
 
 import bs.websocket.sample.domain.repository.SampleRepository;
-import bs.websocket.sample.domain.Sample;
+import bs.websocket.sample.domain.document.Sample;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

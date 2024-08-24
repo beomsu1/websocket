@@ -1,6 +1,6 @@
 package bs.websocket.sample.domain.repository;
 
-import bs.websocket.sample.domain.Sample;
+import bs.websocket.sample.domain.document.Sample;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

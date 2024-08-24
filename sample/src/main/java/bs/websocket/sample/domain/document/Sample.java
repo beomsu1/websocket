@@ -1,4 +1,4 @@
-package bs.websocket.sample.domain;
+package bs.websocket.sample.domain.document;
 
 import lombok.Builder;
 import lombok.Data;

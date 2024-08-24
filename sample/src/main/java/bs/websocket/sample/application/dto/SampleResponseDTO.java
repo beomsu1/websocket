@@ -1,6 +1,6 @@
 package bs.websocket.sample.application.dto;
 
-import bs.websocket.sample.domain.Sample;
+import bs.websocket.sample.domain.document.Sample;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
