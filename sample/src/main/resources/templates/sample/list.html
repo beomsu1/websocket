@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Sample</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        #sampleList {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>WebSocket Sample Data</h1>
+<div id="status">연결 상태: 연결 중...</div>
+
+<!-- 초기 데이터가 있을 경우 서버에서 렌더링 -->
+<div id="sampleList">
+    <ul>
+        <!-- Thymeleaf will render initial data here -->
+        <li th:each="sample : ${sampleList}">
+            ID: <span th:text="${sample.id}">N/A</span>,
+            Name: <span th:text="${sample.name}">N/A</span>,
+            Description: <span th:text="${sample.description}">N/A</span>
+        </li>
+    </ul>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // WebSocket 연결 설정
+        const socket = new SockJS('/ws');  // WebSocket 엔드포인트
+        const stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function(frame) {
+            document.getElementById('status').textContent = '연결 상태: 연결됨';
+            console.log('Connected: ' + frame);
+
+            stompClient.subscribe('/topic/samples', function(message) {
+                console.log("Received message:", message.body);
+                const samples = JSON.parse(message.body);
+                console.log("samples:", samples);
+                updateUI(samples);
+            });
+        });
+
+        // 수신된 데이터를 UI에 추가하는 함수
+        function updateUI(samples) {
+            const sampleList = document.getElementById('sampleList');
+            const ul = sampleList.querySelector('ul');
+
+
+            // // 기존 리스트 초기화
+            // ul.innerHTML = '';
+
+            // 수신된 데이터를 리스트에 추가
+            samples.forEach(function(sample) {
+                console.log("sample.id:", sample.id);
+
+                const li = document.createElement('li');
+                li.textContent = 'ID: ' + (sample.id || 'N/A') + ', Name: ' + (sample.name || 'N/A') + ', Description: ' + (sample.description || 'N/A');
+                ul.appendChild(li);
+            });
+        }
+    });
+</script>
+</body>
+</html>

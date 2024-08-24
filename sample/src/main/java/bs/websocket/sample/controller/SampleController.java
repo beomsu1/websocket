@@ -8,11 +8,13 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @Log4j2(topic = "Sample Controller")
 @RequiredArgsConstructor
 public class SampleController {
@@ -27,6 +29,16 @@ public class SampleController {
 
         log.info(sampleService.getSampleList());
         return sampleService.getSampleList();
+    }
+
+    @GetMapping("/sample/list")
+    public void getSampleList(Model model){
+
+        log.info("SampleController : GET - getSampleList");
+
+        List<SampleResponseDTO> sampleList = sampleService.getSampleList();
+
+        model.addAttribute("sampleList", sampleList);
     }
 
     @PostMapping("/sample")
